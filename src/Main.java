@@ -14,29 +14,40 @@ public class Main {
             this.color = color;
         }
     }
-
-    private static final String PINK_COLOR = "#FF1493";
-    private static final String CYAN_COLOR = "#00FFFF";
+    
+    private static final String RED_COLOR = "#8B0000";
     private static final String GRAY_COLOR = "#808080";
 
     private static final DialogueLine[] DIALOGUE = {
-            new DialogueLine("I love you!", 1000, PINK_COLOR),
-            new DialogueLine("You might as well take my heart", 3000, PINK_COLOR),
-            new DialogueLine("It's already full of you!", 1500, PINK_COLOR),
-            new DialogueLine("Please go.", 1000, CYAN_COLOR),
-            new DialogueLine("What is it?", 1000, PINK_COLOR),
-            new DialogueLine("What's wrong, my dear?", 1500, PINK_COLOR),
-            new DialogueLine("You don't know anything about me anymore", 1500, CYAN_COLOR),
-            new DialogueLine("We only spoke again four months ago!", 1500, CYAN_COLOR),
-            new DialogueLine("Four months?", 1000, PINK_COLOR),
-            new DialogueLine("I've known you my whole life", 1500, PINK_COLOR),
-            new DialogueLine("All your life?", 1000, CYAN_COLOR),
-            new DialogueLine("It's true", 1000, PINK_COLOR),
-            new DialogueLine("When I hear a beautiful song", 1500, PINK_COLOR),
-            new DialogueLine("I think \"this song reminds me of him\"", 1500, PINK_COLOR),
-            new DialogueLine("I looked at the codes knowing...", 2000, PINK_COLOR),
-            new DialogueLine("\"One day I would use them for you.\"", 2000, PINK_COLOR),
-            new DialogueLine("...", 2000, PINK_COLOR)
+            new DialogueLine("Esperava muito de você", 2000, RED_COLOR),
+            new DialogueLine("De nós", 1500, RED_COLOR),
+            new DialogueLine("Mas eu tenho que aceitar", 1000, RED_COLOR),
+            new DialogueLine("Que sempre serei", 1000, RED_COLOR),
+            new DialogueLine("Sozinho", 1000, RED_COLOR),
+            new DialogueLine("...", 1000, RED_COLOR),
+            new DialogueLine("Sinto como se...", 2000, RED_COLOR),
+            new DialogueLine("Tivesse roubado uma vida", 2000, RED_COLOR),
+            new DialogueLine("Não sou a pessoa que deveria ser", 2000, RED_COLOR),
+            new DialogueLine("Eu sou vazio", 1500, RED_COLOR),
+            new DialogueLine("Mas laços humanos sempre levam", 1500, RED_COLOR),
+            new DialogueLine("A grandes complicações", 1000, RED_COLOR),
+            new DialogueLine("Compomissos, cumplicidade", 800, RED_COLOR),
+            new DialogueLine("Levar passoas ao aeroporto", 2000, RED_COLOR),
+            new DialogueLine("Eu acho que as pessoa ao meu redor", 1500, RED_COLOR),
+            new DialogueLine("Estão sempre fazendo algum tipo de conexão", 2000, RED_COLOR),
+            new DialogueLine("Como amizade ou romance", 3000, RED_COLOR),
+            new DialogueLine("Além disso,", 1000, RED_COLOR),
+            new DialogueLine("Se eu deixar alguém se aproximar assim", 1500, RED_COLOR),
+            new DialogueLine("Eles veriam quem eu realmente sou", 1500, RED_COLOR),
+            new DialogueLine("E eu não posso deixar isso acontecer", 1500, RED_COLOR),
+            new DialogueLine("Não estou nada infeliz", 1000, RED_COLOR),
+            new DialogueLine("Estou bem satisfeito em seguir minha vida", 1500, RED_COLOR),
+            new DialogueLine("Acreditando em NADA", 1500, RED_COLOR),
+            new DialogueLine("Sem medo de que possa ver algo maior por ai", 1500, RED_COLOR),
+            new DialogueLine("Não sei o que me sez ser como eu sou", 1500, RED_COLOR),
+            new DialogueLine("Mas", 500, RED_COLOR),
+            new DialogueLine("O que que que tenha sido", 1000, RED_COLOR),
+            new DialogueLine("Deixou um vazio aqui dentro", 8000, RED_COLOR),
     };
 
     private static int currentLineIndex = -1;
@@ -47,7 +58,7 @@ public class Main {
 
         SwingUtilities.invokeLater(() -> {
 
-            JFrame frame = new JFrame("Dangerously Yours");
+            JFrame frame = new JFrame("Dexter");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(800, 600);
             frame.setLocationRelativeTo(null);
@@ -56,14 +67,28 @@ public class Main {
             mainPanel.setBackground(Color.BLACK);
             frame.add(mainPanel);
 
-            JLabel musicInfoLabel = new JLabel("Dangerously Yours", SwingConstants.CENTER);
+            JLabel musicInfoLabel = new JLabel("Dexter", SwingConstants.CENTER);
             musicInfoLabel.setForeground(Color.WHITE);
             musicInfoLabel.setFont(new Font("Garamond", Font.BOLD, 24));
             mainPanel.add(musicInfoLabel, BorderLayout.NORTH);
 
-            lyricsLabel = new JLabel(getFormattedLyrics(), SwingConstants.CENTER);
-            lyricsLabel.setFont(new Font("Arial", Font.PLAIN, 22));
-            mainPanel.add(lyricsLabel, BorderLayout.CENTER);
+            JPanel lyricsContainer = new JPanel();
+            lyricsContainer.setBackground(Color.BLACK);
+
+            lyricsLabel = new JLabel(getFormattedLyrics());
+            lyricsLabel.setFont(new Font("Arial", Font.PLAIN, 15));
+            lyricsLabel.setForeground(Color.WHITE);
+
+            JScrollPane scrollPane = new JScrollPane(lyricsLabel);
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());
+            scrollPane.setPreferredSize(new Dimension(600, 400));
+
+
+            scrollPane.getViewport().setBackground(Color.BLACK);
+            scrollPane.setBackground(Color.BLACK);
+
+            lyricsContainer.add(scrollPane);
+            mainPanel.add(lyricsContainer, BorderLayout.CENTER);
 
             JPanel controlPanel = new JPanel();
             controlPanel.setBackground(Color.DARK_GRAY);
@@ -94,7 +119,6 @@ public class Main {
         }
 
         int duration = DIALOGUE[currentLineIndex].durationMillis;
-
         lyricsLabel.setText(getFormattedLyrics());
 
         timer = new Timer(duration, e -> {
@@ -105,12 +129,9 @@ public class Main {
     }
 
     private static String getFormattedLyrics() {
-
         StringBuilder sb = new StringBuilder("<html><body>");
-
         for (int i = 0; i < DIALOGUE.length; i++) {
             DialogueLine line = DIALOGUE[i];
-
             if (i == currentLineIndex) {
                 sb.append("<p style='color:").append(line.color).append("; font-weight:bold;'>").append(line.text).append("</p>");
             } else {
